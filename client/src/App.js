@@ -1,24 +1,29 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import axios from 'axios';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [dogs, setDogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(()=>{
+    axios.get("http://localhost:5000/api/visitors/dogs")
+    .then(res=>{
+      setDogs(res.data)
+      setIsLoading(false)
+    })
+    .catch(err=>console.log(err))
+ })
+ return (
+   <div className="App">
+    {isLoading ?
+      <h2>Gathering the best Doggos in the world!</h2>
+     :
+     dogs.map(dog=>{
+       return <p>{dog.name}</p>
+   })
+  }
+ </div>
+ );
 }
 
 export default App;
